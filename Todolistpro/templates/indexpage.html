@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Todo list</title>
+  </head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+ <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<style media="screen">
+form{
+  border: 2px solid red;
+  border-radius: 12px;
+  padding: 5px;
+}
+.T{
+  color: red;
+  font-family: serif;
+  font-weight: bold;
+  text-align: center;
+}
+</style>
+  <body>
+    <h1 class="T">ToDoList</h1>
+    <div class="container-fluid ">
+      <div class="row">
+        <div class="offset-md-1 col-md-6 text-center mt-3">
+          {% if data %}
+          {% for i in data %}
+          <form class="bg-light   font-weight-bold mt-3" >
+            <tr>
+              <td>{{i.title}}</td><br>
+              <td>{{i.details}}</td><br><br><br>
+              <td>{{i.current_time}}</td>
+
+            </tr>
+
+            <div class="text-right">
+              <a href="{% url 'update' i.id %}" class="btn btn-outline-success">Update</a>
+
+
+              <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ i.id }}">Delete</a>
+              <div class="modal fade" id="deleteModal{{ i.id }}" tabindex="-1" role="dialog"
+                  aria-labelledby="deleteModalLabel{{ i.id }}" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-body">
+                        <h5 class="text-dark font-weight-bold text-center">Are you sure it will delete permanently  {{ i.title }}"?</h5>
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No, Cancel!</button>
+                        <a href="{% url 'delete_data' i.id %}" class="btn btn-danger">Yes, delete it!</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+          </form>
+
+          {% endfor %}
+          {% else %}
+          <h1>nodata</h1>
+          {% endif %}
+
+        </div>
+        <div class="col-md-4">
+          <form class="bg-success text-white mt-4"  method="POST" >
+            {% csrf_token %}
+            <label for="" >Title</label>
+            <input type="text" name="title" value="" placeholder="Enter the Title" size="60" class="form-control mt-2 "><br>
+            <label for="">Description *</label>
+            <textarea name="details" required rows="14  " cols="80" placeholder="Enter the Description" class="form-control mt-1"></textarea>
+
+
+            <div class="text-center">
+              <input type="submit" name="" value="submit" class="btn btn-primary mt-2">
+
+            </div>
+
+          </form>
+
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+  </body>
+</html>
